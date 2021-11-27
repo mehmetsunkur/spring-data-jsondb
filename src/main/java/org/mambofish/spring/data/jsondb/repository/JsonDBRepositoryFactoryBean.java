@@ -15,6 +15,15 @@ public class JsonDBRepositoryFactoryBean<T extends Repository<S, String>, S> ext
 
     private JsonDBTemplate template;
 
+    /**
+     * Creates a new {@link TransactionalRepositoryFactoryBeanSupport} for the given repository interface.
+     *
+     * @param repositoryInterface must not be {@literal null}.
+     */
+    protected JsonDBRepositoryFactoryBean(Class<? extends T> repositoryInterface) {
+        super(repositoryInterface);
+    }
+
     @Autowired
     public void setTemplate(JsonDBTemplate template) {
         this.template = template;

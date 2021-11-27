@@ -3,6 +3,7 @@ package org.mambofish.spring.data.jsondb.repository;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import io.jsondb.JsonDBTemplate;
 import org.springframework.data.domain.Page;
@@ -37,19 +38,19 @@ public class JsonDBRepositoryImpl<T, ID extends Serializable> implements JsonDBR
     }
 
     @Override
-    public <S extends T> Iterable<S> save(Iterable<S> iterable) {
+    public <S extends T> Iterable<S> saveAll(Iterable<S> iterable) {
         iterable.forEach(this::save);
         return iterable;
     }
 
     @Override
-    public T findOne(ID id) {
-        return template.findById(id, clazz);
+    public Optional<T> findById(ID id) {
+        return Optional.ofNullable(template.findById(id, clazz));
     }
 
     @Override
-    public boolean exists(ID id) {
-        return findOne(id) != null;
+    public boolean existsById(ID id) {
+        return findById(id).isPresent();
     }
 
     @Override
@@ -58,12 +59,12 @@ public class JsonDBRepositoryImpl<T, ID extends Serializable> implements JsonDBR
     }
 
     @Override
-    public Iterable<T> findAll(Iterable<ID> iterable) {
+    public Iterable<T> findAllById(Iterable<ID> iterable) {
         List<T> results = new ArrayList();
         iterable.forEach(ID -> {
-            T o = findOne(ID);
-            if (o != null) {
-                results.add(o);
+            Optional<T> optionalT = findById(ID);
+            if (optionalT.isPresent()) {
+                results.add(optionalT.get());
             }
         });
         return results;
@@ -75,10 +76,10 @@ public class JsonDBRepositoryImpl<T, ID extends Serializable> implements JsonDBR
     }
 
     @Override
-    public void delete(ID id) {
-        T object = findOne(id);
-        if (object != null) {
-            delete(object);
+    public void deleteById(ID id) {
+        Optional<T> objectOptional = findById(id);
+        if (objectOptional.isPresent()) {
+            delete(objectOptional.get());
         }
     }
 
@@ -88,6 +89,16 @@ public class JsonDBRepositoryImpl<T, ID extends Serializable> implements JsonDBR
     }
 
     @Override
+    public void deleteAllById(Iterable<? extends ID> ids) {
+
+    }
+
+    @Override
+    public void deleteAll(Iterable<? extends T> entities) {
+
+    }
+
+    //@Override
     public void delete(Iterable<? extends T> iterable) {
         iterable.forEach(this::delete);
     }

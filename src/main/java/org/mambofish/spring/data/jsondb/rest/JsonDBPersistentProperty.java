@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mapping.Association;
 import org.springframework.data.mapping.model.AnnotationBasedPersistentProperty;
+import org.springframework.data.mapping.model.Property;
 import org.springframework.data.mapping.model.SimpleTypeHolder;
 
 /**
@@ -17,8 +18,8 @@ public class JsonDBPersistentProperty extends AnnotationBasedPersistentProperty<
 
 	private static final Logger logger = LoggerFactory.getLogger(JsonDBPersistentProperty.class);
 
-    public JsonDBPersistentProperty(Field field, PropertyDescriptor propertyDescriptor, JsonDBPersistentEntity<?> jsonDBPersistentEntity, SimpleTypeHolder typeHolder) {
-        super(field, propertyDescriptor, jsonDBPersistentEntity, typeHolder);
+    public JsonDBPersistentProperty(Property property, JsonDBPersistentEntity<?> jsonDBPersistentEntity, SimpleTypeHolder typeHolder) {
+        super(property, jsonDBPersistentEntity, typeHolder);
     }
 
 	@Override

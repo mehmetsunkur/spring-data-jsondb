@@ -2,8 +2,10 @@ package org.mambofish.spring.data.jsondb.repository;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.function.Supplier;
 
 import org.mambofish.spring.data.jsondb.rest.JsonDBMappingContextFactoryBean;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
@@ -21,7 +23,7 @@ public class JsonDBRepositoryConfigurationExtension extends RepositoryConfigurat
     }
 
     @Override
-    public String getRepositoryFactoryClassName() {
+    public String getRepositoryFactoryBeanClassName() {
         return JsonDBRepositoryFactoryBean.class.getName();
     }
 
@@ -41,8 +43,7 @@ public class JsonDBRepositoryConfigurationExtension extends RepositoryConfigurat
         super.registerBeansForRoot(registry, config);
 
         Object source = config.getSource();
-
-        registerIfNotAlreadyRegistered(new RootBeanDefinition(JsonDBMappingContextFactoryBean.class), registry,
-                "jsonMappingContext", source);
+        Supplier<AbstractBeanDefinition> supplier = () -> new RootBeanDefinition(JsonDBMappingContextFactoryBean.class);
+        registerIfNotAlreadyRegistered(supplier, registry,"jsonMappingContext", source);
     }
 }
